@@ -47,7 +47,7 @@ class EyerissTop(val param: EyerissTopParam) extends Module with ClusterConfig w
   cgCtrlPath.routerClusterCtrl.pSumCtrlSel.inDataSel := true.B // from PSum SRAM bank
   cgCtrlPath.routerClusterCtrl.pSumCtrlSel.outDataSel := true.B // send it to PE Array
   cgCtrlPath.peClusterCtrl.inActSel.inDataSel := false.B // don't broad-cast inAct
-  cgCtrlPath.peClusterCtrl.inActSel.outDataSel := DontCare
+//  cgCtrlPath.peClusterCtrl.inActSel.outDataSel := DontCare
   cgCtrlPath.peClusterCtrl.pSumInSel := true.B // load PSum from Router
   cgCtrlPath.readOutPSum := decoderIO.pSumIO.pSumLoadEn
   cgCtrlPath.doMacEn := decoderIO.doMacEn

@@ -149,7 +149,7 @@ class CommonClusterCtrlTwoUIntIO extends Bundle {
 
 class CommonClusterCtrlBoolUIntIO extends Bundle {
   val inDataSel: Bool = Output(Bool())
-  val outDataSel: UInt = Output(UInt(2.W))
+//  val outDataSel: UInt = Output(UInt(2.W))
 }
 
 class CommonClusterCtrlTwoBoolIO extends Bundle {

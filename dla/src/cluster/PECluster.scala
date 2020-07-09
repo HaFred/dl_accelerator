@@ -115,33 +115,35 @@ class PEClusterInAct(debug: Boolean) extends Module with ClusterConfig {
   // true then all PEs' data receive from the same router whose index equals to outDataSel's value;
   protected val inActRoutingMode: Bool = Wire(Bool())
   inActRoutingMode.suggestName("inActRoutingMode")
-  protected val inActBroadCastIdxWire: UInt = Wire(UInt(2.W))
-  inActBroadCastIdxWire.suggestName("inActBroadCastIdxWire")
+//  protected val inActBroadCastIdxWire: UInt = Wire(UInt(2.W))
+//  inActBroadCastIdxWire.suggestName("inActBroadCastIdxWire")
   inActRoutingMode := io.inActCtrlSel.inDataSel // true for broad-cast
-  inActBroadCastIdxWire := io.inActCtrlSel.outDataSel
+//  inActBroadCastIdxWire := io.inActCtrlSel.outDataSel
   when (inActRoutingMode) { // when need to broad-cast, then each port of inAct should connect to the same one
-    dataPart.inActToArrayData.inActIO.foreach({x =>
-      x.adrIOs.data.bits := MuxLookup(io.inActCtrlSel.outDataSel, 0.U, io.inActToArrayData.inActIO.zipWithIndex.map({
-        case (o, i) => i.asUInt -> o.adrIOs.data.bits}))
-      x.adrIOs.data.valid := MuxLookup(io.inActCtrlSel.outDataSel, false.B, io.inActToArrayData.inActIO.zipWithIndex.map({
-        case (o, i) => i.asUInt -> o.adrIOs.data.valid}))
-      x.dataIOs.data.bits := MuxLookup(io.inActCtrlSel.outDataSel, 0.U, io.inActToArrayData.inActIO.zipWithIndex.map({
-        case (o, i) => i.asUInt -> o.dataIOs.data.bits}))
-      x.dataIOs.data.valid := MuxLookup(io.inActCtrlSel.outDataSel, false.B, io.inActToArrayData.inActIO.zipWithIndex.map({
-        case (o, i) => i.asUInt -> o.dataIOs.data.valid}))
-    })
-    io.inActToArrayData.inActIO.zipWithIndex.foreach({case (x, idx1) =>
-      x.adrIOs.data.ready := MuxLookup(io.inActCtrlSel.outDataSel, false.B,
-        Seq.fill(inActRouterNum){1}.zipWithIndex.map({ case (_, idx) =>
-        if (idx1 == idx) idx.asUInt -> dataPart.inActToArrayData.inActIO.map(y => y.adrIOs.data.ready).reduce(_ && _)
-        else idx.asUInt -> false.B
-      }))
-      x.dataIOs.data.ready := MuxLookup(io.inActCtrlSel.outDataSel, false.B,
-        Seq.fill(inActRouterNum){1}.zipWithIndex.map({ case (_, idx) =>
-        if (idx1 == idx) idx.asUInt -> dataPart.inActToArrayData.inActIO.map(y => y.dataIOs.data.ready).reduce(_ && _)
-        else idx.asUInt -> false.B
-      }))
-    })
+//    dataPart.inActToArrayData.inActIO.foreach({x =>
+//      x.adrIOs.data.bits := MuxLookup(io.inActCtrlSel.outDataSel, 0.U, io.inActToArrayData.inActIO.zipWithIndex.map({
+//        case (o, i) => i.asUInt -> o.adrIOs.data.bits}))
+//      x.adrIOs.data.valid := MuxLookup(io.inActCtrlSel.outDataSel, false.B, io.inActToArrayData.inActIO.zipWithIndex.map({
+//        case (o, i) => i.asUInt -> o.adrIOs.data.valid}))
+//      x.dataIOs.data.bits := MuxLookup(io.inActCtrlSel.outDataSel, 0.U, io.inActToArrayData.inActIO.zipWithIndex.map({
+//        case (o, i) => i.asUInt -> o.dataIOs.data.bits}))
+//      x.dataIOs.data.valid := MuxLookup(io.inActCtrlSel.outDataSel, false.B, io.inActToArrayData.inActIO.zipWithIndex.map({
+//        case (o, i) => i.asUInt -> o.dataIOs.data.valid}))
+//    })
+//    io.inActToArrayData.inActIO.zipWithIndex.foreach({case (x, idx1) =>
+//      x.adrIOs.data.ready := MuxLookup(io.inActCtrlSel.outDataSel, false.B,
+//        Seq.fill(inActRouterNum){1}.zipWithIndex.map({ case (_, idx) =>
+//        if (idx1 == idx) idx.asUInt -> dataPart.inActToArrayData.inActIO.map(y => y.adrIOs.data.ready).reduce(_ && _)
+//        else idx.asUInt -> false.B
+//      }))
+//      x.dataIOs.data.ready := MuxLookup(io.inActCtrlSel.outDataSel, false.B,
+//        Seq.fill(inActRouterNum){1}.zipWithIndex.map({ case (_, idx) =>
+//        if (idx1 == idx) idx.asUInt -> dataPart.inActToArrayData.inActIO.map(y => y.dataIOs.data.ready).reduce(_ && _)
+//        else idx.asUInt -> false.B
+//      }))
+//    })
+    dataPart.inActToArrayData.inActIO <> io.inActToArrayData.inActIO
+
   } .otherwise {
     dataPart.inActToArrayData.inActIO <> io.inActToArrayData.inActIO
   }

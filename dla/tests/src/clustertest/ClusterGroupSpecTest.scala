@@ -232,7 +232,7 @@ class ClusterGroupSpecTest extends ClusterSpecTestBasic {
       theTop.ctrlPath.routerClusterCtrl.pSumCtrlSel.inDataSel.poke(true.B) // from PSum SRAM bank
       theTop.ctrlPath.routerClusterCtrl.pSumCtrlSel.outDataSel.poke(true.B) // send it to PE Array
       theTop.ctrlPath.peClusterCtrl.inActSel.inDataSel.poke(false.B) // don't broad-cast inAct
-      theTop.ctrlPath.peClusterCtrl.inActSel.outDataSel.poke(0.U) // Don't care
+//      theTop.ctrlPath.peClusterCtrl.inActSel.outDataSel.poke(0.U) // Don't care
       theTop.ctrlPath.peClusterCtrl.pSumInSel.poke(true.B) // load PSum from Router
       theClock.step()
       theTop.ctrlPath.doMacEn.poke(true.B)
