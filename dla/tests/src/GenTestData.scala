@@ -318,11 +318,16 @@ class GenFunc(inActSparseRatio: Double = 0.845, weightSparseRatio: Double = 0.6,
       } else {
         if (j != 0) {
           adrList = adrList:::List(dataList.length)
+          // f: to make the adrList correct for the last column
         }
         for (i <- currentCol.indices) { // for row
           if (currentCol(i) != 0){
             countList = countList:::List(i)
             dataList = dataList:::List(currentCol(i))
+          }
+          // f: this one is for generating correct adrList, when there is more than one non-0 element in the last col
+          if ((j == listA.head.length - 1) && (i == currentCol.length - 1)) {
+            adrList = adrList:::List(dataList.length)
           }
         }
       }
@@ -334,6 +339,10 @@ class GenFunc(inActSparseRatio: Double = 0.845, weightSparseRatio: Double = 0.6,
     if (adrList.max > max) {
       println(s"${adrList.max} <= $max?\n$adrList\n\n$dataList\n")
     }
+    //    Seq(adrList, countList, dataList)
+    println(s"adrList = $adrList")
+    println(s"countList = $countList")
+    println(s"dataList = $dataList")
     Seq(adrList, countList, dataList)
   }
   protected def toBinary(i: Int, digits: Int = 8): String =
